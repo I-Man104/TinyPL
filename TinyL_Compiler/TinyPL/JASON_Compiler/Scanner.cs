@@ -25,8 +25,8 @@ public enum TOKEN_ENUM
     TOKEN_IF, //
     TOKEN_THEN,
     TOKEN_ELSE, //
-    TOKEN_ElseIf, //
-    TOKEN_EndL, //
+    TOKEN_ElSEIF, //
+    TOKEN_ENDL, //
     TOKEN_READ,
     TOKEN_WRITE,
     TOKEN_REPEAT,
@@ -38,7 +38,8 @@ public enum TOKEN_ENUM
     TOKEN_NOT_EQUAL,
     TOKEN_COMMENT,
     TOKEN_LPAREN,
-    TOKEN_RPAREN
+    TOKEN_RPAREN,
+    TOKEN_END
 }
 
 namespace TinyL_Compiler
@@ -55,28 +56,29 @@ namespace TinyL_Compiler
         Dictionary<string, TOKEN_ENUM> ReservedWords = new Dictionary<string, TOKEN_ENUM>();
         Dictionary<string, TOKEN_ENUM> Operators = new Dictionary<string, TOKEN_ENUM>();
 
-        readonly Regex FloatRegex = new Regex(@"^0|([1-9][0-9]*(\.[0-9]+))$", RegexOptions.Compiled);
-        readonly Regex IntRegex = new Regex(@"^0|([1-9][0-9]*)$", RegexOptions.Compiled);
-        readonly Regex StringRegex = new Regex("^\"[^\"]*\"$", RegexOptions.Compiled);
-        readonly Regex CommentRegex = new Regex(@"^/\*([^*]|(\*+[^/]))*\*/$", RegexOptions.Compiled); /**/ /*/**/
-        readonly Regex IdentifierRegex = new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$", RegexOptions.Compiled);
+        readonly Regex FloatRegex = new Regex(@"^[0-9]*(\.[0-9]+)$", RegexOptions.Compiled);
+        readonly Regex IntRegex = new Regex(@"^[0-9]*$", RegexOptions.Compiled);
 
+        readonly Regex StringRegex = new Regex("^\"[^\"]*\"$", RegexOptions.Compiled);
+        readonly Regex CommentRegex = new Regex(@"^/\*([^*]|(\*+[^/]))*\*/$", RegexOptions.Compiled);
+        readonly Regex IdentifierRegex = new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$", RegexOptions.Compiled);
 
         public Scanner()
         {
-            ReservedWords.Add("IF", TOKEN_ENUM.TOKEN_IF);
-            ReservedWords.Add("ELSE", TOKEN_ENUM.TOKEN_ELSE);
-            ReservedWords.Add("ELSEIF", TOKEN_ENUM.TOKEN_ElseIf);
-            ReservedWords.Add("ENDL", TOKEN_ENUM.TOKEN_EndL);
-            ReservedWords.Add("FLOAT", TOKEN_ENUM.TOKEN_FLOAT);
-            ReservedWords.Add("INT", TOKEN_ENUM.TOKEN_INT);
-            ReservedWords.Add("STRING", TOKEN_ENUM.TOKEN_STRING);
-            ReservedWords.Add("READ", TOKEN_ENUM.TOKEN_READ);
-            ReservedWords.Add("WRITE", TOKEN_ENUM.TOKEN_WRITE);
-            ReservedWords.Add("THEN", TOKEN_ENUM.TOKEN_THEN);
-            ReservedWords.Add("UNTIL", TOKEN_ENUM.TOKEN_UNTIL);
-            ReservedWords.Add("REPEAT", TOKEN_ENUM.TOKEN_REPEAT);
-            ReservedWords.Add("RETURN", TOKEN_ENUM.TOKEN_RETURN);
+            ReservedWords.Add("if", TOKEN_ENUM.TOKEN_IF);
+            ReservedWords.Add("else", TOKEN_ENUM.TOKEN_ELSE);
+            ReservedWords.Add("elseif", TOKEN_ENUM.TOKEN_ElSEIF);
+            ReservedWords.Add("end", TOKEN_ENUM.TOKEN_END);
+            ReservedWords.Add("endl", TOKEN_ENUM.TOKEN_ENDL);
+            ReservedWords.Add("float", TOKEN_ENUM.TOKEN_FLOAT);
+            ReservedWords.Add("int", TOKEN_ENUM.TOKEN_INT);
+            ReservedWords.Add("string", TOKEN_ENUM.TOKEN_STRING);
+            ReservedWords.Add("read", TOKEN_ENUM.TOKEN_READ);
+            ReservedWords.Add("write", TOKEN_ENUM.TOKEN_WRITE);
+            ReservedWords.Add("then", TOKEN_ENUM.TOKEN_THEN);
+            ReservedWords.Add("until", TOKEN_ENUM.TOKEN_UNTIL);
+            ReservedWords.Add("repeat", TOKEN_ENUM.TOKEN_REPEAT);
+            ReservedWords.Add("return", TOKEN_ENUM.TOKEN_RETURN);
 
             Operators.Add(".", TOKEN_ENUM.TOKEN_DOT);
             Operators.Add(";", TOKEN_ENUM.TOKEN_SEMICOLON);
@@ -107,21 +109,27 @@ namespace TinyL_Compiler
             {
                 int j = i;
                 char CurrentChar = SourceCode[i];
-                string CurrentLexeme = CurrentChar.ToString();  //id num op comm "str"
+                string CurrentLexeme = CurrentChar.ToString();
 
                 if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n' || CurrentChar == '\t')
                     continue;
 
-                if (CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '*' || CurrentChar == '<' ||
-                    CurrentChar == '.' || CurrentChar == '>' || CurrentChar == '=' || CurrentChar == ',' ||
-                    CurrentChar == ';' || CurrentChar == '{' || CurrentChar == '}' || CurrentChar == '&' ||
-                    CurrentChar == '|' || CurrentChar == ':' || CurrentChar == '(' || CurrentChar == ')')
+                if (CurrentChar == '+' || CurrentChar == '-' || CurrentChar == '*' || 
+                    CurrentChar == '.' || CurrentChar == '>' || CurrentChar == '=' ||
+                    CurrentChar == ';' || CurrentChar == '{' || CurrentChar == '}' || 
+                    CurrentChar == '(' || CurrentChar == ')' || CurrentChar == ',')
+                {
+                    j++;
+                    FindTokenClass(CurrentLexeme);
+                    i = j -1;
+                }
+                else if(CurrentChar == '|' || CurrentChar == ':' || CurrentChar == '&' || CurrentChar == '<')
                 {
                     j++;
                     while (j < SourceCode.Length)
                     {
                         CurrentChar = SourceCode[j];
-                        if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n' || CurrentChar == '\t')
+                        if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n' || CurrentChar == '\t' || Char.IsLetterOrDigit(CurrentChar))
                         {
                             break;
                         }
@@ -129,7 +137,7 @@ namespace TinyL_Compiler
                         ++j;
                     }
                     FindTokenClass(CurrentLexeme.Trim());
-                    i = j -1;
+                    i = j - 1;
                 }
                 else if (Char.IsLetter(CurrentChar)) //if you read a character
                 {
@@ -155,7 +163,8 @@ namespace TinyL_Compiler
                     while (j < SourceCode.Length)
                     {
                         CurrentChar = SourceCode[j];
-                        if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n' || CurrentChar == '\t' || CurrentChar == ';')
+
+                        if ((Operators.ContainsKey(CurrentChar.ToString()) && CurrentChar != '.') || CurrentChar == '&' || CurrentChar == '|' || CurrentChar == ':' || CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n' || CurrentChar == '\t' || CurrentChar == ';')
                         {
                             break;
                         }
@@ -166,6 +175,11 @@ namespace TinyL_Compiler
                     if (Trimmed_CurrentLexeme == "")
                     {
                         FindTokenClass("0");
+                        continue;
+                    }
+                    if(Trimmed_CurrentLexeme[0] == '.')
+                    {
+                        Trimmed_CurrentLexeme = Trimmed_CurrentLexeme.Insert(0,"0");
                     }
                     FindTokenClass(Trimmed_CurrentLexeme);
                     i = j - 1;
@@ -192,7 +206,7 @@ namespace TinyL_Compiler
                 {
                     ++j;
                     char exCurrentChar = CurrentChar;
-                    CurrentChar = SourceCode[j];
+                    CurrentChar = SourceCode[j]; /* ay kalam */
                     if (CurrentChar == '*')
                     {
                         while (j < SourceCode.Length)
@@ -202,6 +216,7 @@ namespace TinyL_Compiler
                             CurrentLexeme += CurrentChar;
                             if (exCurrentChar == '*' && CurrentChar == '/')
                             {
+                                j++;
                                 break;
                             }
                             ++j;
@@ -209,15 +224,14 @@ namespace TinyL_Compiler
                         FindTokenClass(CurrentLexeme);
                         i = j - 1;
                     }
-                    else if(CurrentChar == ' ')
+                    else if(CurrentChar == ' ' || Char.IsDigit(CurrentChar))
                     {
                         FindTokenClass(CurrentLexeme);
                         i = j - 1;
                     }
                 }
             }
-
-            JASON_Compiler.TokenStream = Tokens;
+            Tiny_Compiler.TokenStream = Tokens;
         }
 
         void FindTokenClass(string Lex)
@@ -272,7 +286,7 @@ namespace TinyL_Compiler
             {
                 Errors.Error_List.Add(Lex);
             }
-            else if (isOperator(Lex))
+            else if (Operators.ContainsKey(Lex))
             {
                 Tokens.Add(new Token
                 {
@@ -315,15 +329,6 @@ namespace TinyL_Compiler
                 if (c > 9) return false;
             }
             return true;
-        }
-        bool isOperator(string Lexeme)
-        {
-            if (Operators.ContainsKey(Lexeme))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         bool isString(string Lexeme)

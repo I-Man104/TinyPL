@@ -64,3 +64,14 @@ C:\Users\hp\Desktop\[2022-2023] JASON_Compiler_Template-For Students\[2022-2023]
 C:\Users\hp\Desktop\[2022-2023] JASON_Compiler_Template-For Students\[2022-2023] JASON_Compiler_Template\JASON_Compiler\bin\Debug\JASON_Compiler.pdb
 C:\Users\hp\Desktop\[2022-2023] JASON_Compiler_Template-For Students\[2022-2023] JASON_Compiler_Template\JASON_Compiler\obj\Debug\TinyL_Compiler.Form1.resources
 C:\Users\hp\Desktop\[2022-2023] JASON_Compiler_Template-For Students\[2022-2023] JASON_Compiler_Template\JASON_Compiler\obj\Debug\TinyL_Compiler.Form2.resources
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\bin\Debug\JASON_Compiler.exe.config
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\bin\Debug\JASON_Compiler.exe
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\bin\Debug\JASON_Compiler.pdb
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\obj\Debug\JASON_Compiler.csproj.AssemblyReference.cache
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\obj\Debug\TinyL_Compiler.Form1.resources
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\obj\Debug\TinyL_Compiler.Form2.resources
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\obj\Debug\JASON_Compiler.Properties.Resources.resources
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\obj\Debug\JASON_Compiler.csproj.GenerateResource.cache
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\obj\Debug\JASON_Compiler.csproj.CoreCompileInputs.cache
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\obj\Debug\JASON_Compiler.exe
+G:\TinyPL\TinyL_Compiler\TinyPL\JASON_Compiler\obj\Debug\JASON_Compiler.pdb

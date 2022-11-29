@@ -22,7 +22,7 @@ namespace TinyL_Compiler
             textBox2.Clear();
             //string Code=textBox1.Text.ToLower();
             string Code = textBox1.Text;
-            JASON_Compiler.Start_Compiling(Code);
+            Tiny_Compiler.Start_Compiling(Code);
             PrintTokens();
          //   PrintLexemes();
 
@@ -30,9 +30,9 @@ namespace TinyL_Compiler
         }
         void PrintTokens()
         {
-            for (int i = 0; i < JASON_Compiler.Jason_Scanner.Tokens.Count; i++)
+            for (int i = 0; i < Tiny_Compiler.Jason_Scanner.Tokens.Count; i++)
             {
-               dataGridView1.Rows.Add(JASON_Compiler.Jason_Scanner.Tokens.ElementAt(i)._lexeme, JASON_Compiler.Jason_Scanner.Tokens.ElementAt(i)._type);
+               dataGridView1.Rows.Add(Tiny_Compiler.Jason_Scanner.Tokens.ElementAt(i)._lexeme, Tiny_Compiler.Jason_Scanner.Tokens.ElementAt(i)._type);
             }
         }
 
@@ -57,7 +57,7 @@ namespace TinyL_Compiler
         private void button2_Click(object sender, EventArgs e)
         {
             dataGridView1.Rows.Clear();
-            JASON_Compiler.TokenStream.Clear();
+            Tiny_Compiler.TokenStream.Clear();
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
