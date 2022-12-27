@@ -35,10 +35,10 @@ namespace TinyL_Compiler
         {
             Node program = new Node("Program");
             program.Children.Add(Statements());
-          
+
             program.Children.Add(Main_Function());
-           
-           
+
+
             MessageBox.Show("Success");
             return program;
         }
@@ -46,14 +46,14 @@ namespace TinyL_Compiler
         Node Main_Function()
         {
             Node _main = new Node("Main_Function");
-            
+
             _main.Children.Add(Data_Type());
             _main.Children.Add(match(TOKEN_ENUM.TOKEN_MAIN));
 
 
             return _main;
         }
-        
+
         Node Statements()
         {
             Node state = new Node("statements");
@@ -76,29 +76,29 @@ namespace TinyL_Compiler
             else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_WRITE)
             {
                 state.Children.Add(match(TOKEN_ENUM.TOKEN_WRITE));
-                if (Expression()!=null)
+                if (Expression() != null)
                 {
                     state.Children.Add(Expression());
-                   
+
                 }
                 if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_ENDL)
                 {
                     state.Children.Add(match(TOKEN_ENUM.TOKEN_ENDL));
-                    
+
                 }
-               
+
                 state.Children.Add(match(TOKEN_ENUM.TOKEN_SEMICOLON));
-               // return state;
+                // return state;
 
             }
             else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_IDENTIFIER)
             {
-              
+
                 state.Children.Add(match(TOKEN_ENUM.TOKEN_IDENTIFIER));
                 state.Children.Add(match(TOKEN_ENUM.TOKEN_BINDING));
                 state.Children.Add(Expression());
                 //state.Children.Add(match(TOKEN_ENUM.TOKEN_SEMICOLON));
-               // return state;
+                // return state;
 
             }
             else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_RETURN)
@@ -110,17 +110,17 @@ namespace TinyL_Compiler
                 //return state;
 
             }
-            else if(Data_Type()!=null) //Declaration statement
+            else if (Data_Type() != null) //Declaration statement
             {
-                if(TokenStream[InputPointer]._type==TOKEN_ENUM.TOKEN_STRING)
+                if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_STRING)
                 {
                     state.Children.Add(match(TOKEN_ENUM.TOKEN_STRING));
                 }
-                else if(TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_INT)
+                else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_INT)
                 {
                     state.Children.Add(match(TOKEN_ENUM.TOKEN_INT));
                 }
-               else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_FLOAT)
+                else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_FLOAT)
                 {
                     state.Children.Add(match(TOKEN_ENUM.TOKEN_FLOAT));
                 }
@@ -129,7 +129,7 @@ namespace TinyL_Compiler
                 if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_SEMICOLON) return state;
                 state.Children.Add(match(TOKEN_ENUM.TOKEN_BINDING));
                 state.Children.Add(Expression());
-               // return state;
+                // return state;
 
             }
             else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_REPEAT)
@@ -138,13 +138,13 @@ namespace TinyL_Compiler
                 state.Children.Add(Statements());
                 state.Children.Add(match(TOKEN_ENUM.TOKEN_UNTIL));
                 state.Children.Add(ConditionState());
-               // return state;
+                // return state;
             }
-            else if(Condition()!=null)
+            else if (Condition() != null)
             {
                 state.Children.Add(ConditionState());
             }
-            else if(TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_IF)
+            else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_IF)
             {
                 state.Children.Add(match(TOKEN_ENUM.TOKEN_IF));
                 state.Children.Add(ConditionState());
@@ -164,7 +164,7 @@ namespace TinyL_Compiler
                 {
                     state.Children.Add(match(TOKEN_ENUM.TOKEN_END));
                 }
-               // return state;
+                // return state;
             }
 
             else
@@ -219,7 +219,7 @@ namespace TinyL_Compiler
         {
             Node condState = new Node("Condition Statement");
             condState.Children.Add(Condition());
-            if(ConditionOP()!= null)
+            if (ConditionOP() != null)
             {
                 condState.Children.Add(ConditionOP());
                 condState.Children.Add(Condition());
@@ -242,7 +242,7 @@ namespace TinyL_Compiler
         Node ConditionOP()
         {
             Node condOp = null;
-            if(TokenStream[InputPointer]._type==TOKEN_ENUM.TOKEN_LESS_THAN)
+            if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_LESS_THAN)
             {
                 condOp = new Node("Less Than");
                 condOp.Children.Add(match(TOKEN_ENUM.TOKEN_LESS_THAN));
@@ -252,7 +252,7 @@ namespace TinyL_Compiler
                 condOp = new Node("Greater Than");
                 condOp.Children.Add(match(TOKEN_ENUM.TOKEN_GREATER_THAN));
             }
-           else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_EQUALITY_OPERATOR)
+            else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_EQUALITY_OPERATOR)
             {
                 condOp = new Node("Equality");
                 condOp.Children.Add(match(TOKEN_ENUM.TOKEN_EQUALITY_OPERATOR));
@@ -274,7 +274,7 @@ namespace TinyL_Compiler
         Node Ter()
         {
             Node ter = new Node("Ter");
-            if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_MULTIPLY_OPERATOR || 
+            if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_MULTIPLY_OPERATOR ||
                 TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_DIVIDE_OPERATOR)
             {
                 ter.Children.Add(ArithetmeticOp());
@@ -292,11 +292,11 @@ namespace TinyL_Compiler
             {
                 Fact.Children.Add(match(TOKEN_ENUM.TOKEN_IDENTIFIER));
             }
-           else if(TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_INT)
+            else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_INT)
             {
                 Fact.Children.Add(match(TOKEN_ENUM.TOKEN_INT));
             }
-            else 
+            else
             {
                 Fact.Children.Add(match(TOKEN_ENUM.TOKEN_FLOAT));
             }
@@ -308,17 +308,17 @@ namespace TinyL_Compiler
             Node dataType = null;
             if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_STRING)
             {
-                 dataType = new Node("Data Type String");
+                dataType = new Node("Data Type String");
                 dataType.Children.Add(match(TOKEN_ENUM.TOKEN_STRING));
             }
             else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_INT)
             {
-                 dataType = new Node("Data Type Integer");
+                dataType = new Node("Data Type Integer");
                 dataType.Children.Add(match(TOKEN_ENUM.TOKEN_INT));
             }
             else
             {
-                 dataType = new Node("Data Type Float");
+                dataType = new Node("Data Type Float");
                 dataType.Children.Add(match(TOKEN_ENUM.TOKEN_FLOAT));
             }
             return dataType;
@@ -340,11 +340,11 @@ namespace TinyL_Compiler
                 return null;
             }
         }
-        
+
         Node Expression()
         {
             Node expression = null;
-           
+
             if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_STRING)
             {
                 expression = new Node("Expression");
@@ -366,13 +366,13 @@ namespace TinyL_Compiler
         {
             //term || term + - * / term
             Node equation = new Node("Equation");
-            if(TokenStream[InputPointer]._type==TOKEN_ENUM.TOKEN_INT)
+            if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_INT)
             {
                 equation.Children.Add(Term());
             }
             else
             {
-              equation.Children.Add(Equat());
+                equation.Children.Add(Equat());
             }
             equation.Children.Add(Term());
             return equation;
@@ -393,13 +393,13 @@ namespace TinyL_Compiler
             }
             else
                 return null;
-           
+
             return equat;
-        }        
+        }
         Node Exp()
         {
             Node exp = new Node("exp");
-            if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_PLUS_OPERATOR|| TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_MINUS_OPERATOR)
+            if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_PLUS_OPERATOR || TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_MINUS_OPERATOR)
             {
                 exp.Children.Add(ArithetmeticOp());
                 exp.Children.Add(Term());
@@ -414,20 +414,20 @@ namespace TinyL_Compiler
         }
         Node ArithetmeticOp()
         {
-           
+
             if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_PLUS_OPERATOR)
             {
                 Node add = new Node("AddOp");
                 add.Children.Add(match(TOKEN_ENUM.TOKEN_PLUS_OPERATOR));
                 return add;
             }
-            else if(TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_MINUS_OPERATOR)
+            else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_MINUS_OPERATOR)
             {
                 Node minus = new Node("MinusOp");
                 minus.Children.Add(match(TOKEN_ENUM.TOKEN_MINUS_OPERATOR));
                 return minus;
             }
-           
+
             else if (TokenStream[InputPointer]._type == TOKEN_ENUM.TOKEN_MULTIPLY_OPERATOR)
             {
                 Node mult = new Node("MultOp");
@@ -437,11 +437,11 @@ namespace TinyL_Compiler
             else
             {
                 Node div = new Node("DivideOp");
-               div.Children.Add(match(TOKEN_ENUM.TOKEN_DIVIDE_OPERATOR));
+                div.Children.Add(match(TOKEN_ENUM.TOKEN_DIVIDE_OPERATOR));
                 return div;
             }
         }
-       
+
 
         public Node match(TOKEN_ENUM ExpectedToken)
         {
